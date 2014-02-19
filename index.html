@@ -1,1 +1,243 @@
-Contents coming soon...
+<html>
+<head>
+<style>
+
+*{
+padding: 0px;
+margin: 0px;
+}
+
+body{
+background-color: #222222;
+}
+
+#canvas{
+background-color: #000000;
+position: absolute;
+//border: 5px red solid;
+//border-radius: 20px;
+}
+
+</style>
+
+</head>
+<body>
+<canvas id="canvas">
+
+</canvas>
+<script>
+var a=[];
+var can=document.getElementById('canvas');
+var ctx=can.getContext('2d');
+//can.style.position="absolute";
+can.style.left =0*window.innerWidth;
+can.style.top =0*window.innerHeight;
+can.height=1*window.innerHeight;
+can.width=1*window.innerWidth;
+
+var x=0.5*can.width;
+var y=0.5*can.height;
+var omega=0;
+var radius=180;
+var xp=x+radius;
+var yp=y;
+var theta=0; var fieh=0;
+var keys = [];
+
+
+ function rotate(){
+
+ if(keys[37]){
+  //xp=x+radius*Math.cos(theta);
+  //yp=y+radius*Math.sin(theta);
+  theta-=0.1; //console.log(theta);
+  //fieh-=Mat.PI/12; console.log(fieh);
+
+}
+
+if(keys[39]){
+  //xp=x+radius*Math.cos(theta);
+  //yp=y+radius*Math.sin(theta);
+  theta+=0.05; //console.log(theta);
+   //fieh+=Math.PI/12; console.log(fieh);
+}
+
+    //ctx.fillStyle="rgba(0,0,0,1)"; 
+     //ctx.fillStyle="transparent"; 
+   ctx.beginPath(); ctx.fillStyle="rgba(0,0,0,0.4)";
+    ctx.fillRect(0, 0, can.width, can.height);
+
+ctx.beginPath();
+     ctx.arc(x,y,radius,0,Math.PI*2); ctx.strokeStyle='grey'; ctx.lineWidth=1; ctx.stroke();
+
+    ctx.beginPath();
+     ctx.arc(x,y,radius,theta,Math.PI/3+theta); ctx.strokeStyle='rgba(255,255,255,1)'; ctx.lineWidth=10; ctx.stroke();
+ctx.beginPath();
+     ctx.arc(x,y,radius,2*Math.PI/3+theta,Math.PI+theta); ctx.strokeStyle='rgba(0,255,0,1)'; ctx.lineWidth=10;  
+ctx.stroke();
+ctx.beginPath();
+ctx.lineWidth=10;
+     ctx.arc(x,y,radius,4*Math.PI/3+theta,5/3*Math.PI+theta); ctx.strokeStyle='orange';  
+ctx.stroke();
+ctx.beginPath();
+     ctx.arc(x,y,20,0,Math.PI*2); ctx.fillStyle='blue'; ctx.fill();
+//drawing detecting points..
+
+
+requestAnimationFrame(rotate);
+}
+rotate();
+
+document.addEventListener("keydown",function(k){
+ keys[k.keyCode]=true;
+
+});
+
+document.addEventListener("keyup",function(k){
+
+ keys[k.keyCode]=false;
+});
+
+
+
+
+//var canvas = document.getElementById("canvas");
+//var ctx = canvas.getContext("2d");
+
+
+var W = can.width; var H=can.height;
+
+
+var evils = [];
+for(var i = 0; i < 10; i++)
+{
+
+	evils.push(new create_evils());
+ 
+}
+
+
+function create_evils()
+{
+
+	this.xt =Math.floor(Math.random()*W/5);
+	this.yt = Math.floor(Math.random()*H/5);
+	
+
+	this.vx =Math.floor( Math.random()*8-3);
+	this.vy =Math.floor( Math.random()*8-3);
+	
+
+	//var r = Math.random()*255>>0;
+	//var g = Math.random()*255>>0;
+	//var b = Math.random()*255>>0;
+	//this.color = "rgba("+r+", "+g+", "+b+", 0.5)";
+	this.r=Math.random()*255>>0; this.g=Math.random()*255>>0; this.b=Math.random()*255>>0;
+	this.radiust = Math.random()*20+20;
+
+}
+
+//var xt = 100; var yt = 100;
+var lhs; var rhs; var pixel;
+var temp;var flag; var slope;
+function draw()
+{        //ctx.fillStyle = "black";
+	//ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
+	//ctx.fillRect(0, 0, W, H);
+  	
+
+	for(var t = 0; t < evils.length; t++)
+	{
+		var p = evils[t];
+		 //p.vx=temp;
+   slope=(y-p.yt)/(x-p.xt);
+		ctx.beginPath();
+	      	
+
+		/*var gradient = ctx.createRadialGradient(p.xt, p.yt, 0, p.xt, p.yt, p.radiust);
+		gradient.addColorStop(0, "white");
+		gradient.addColorStop(0.4, "white");
+		gradient.addColorStop(0.4, p.color);
+		gradient.addColorStop(1, "black");
+		*/
+		//ctx.fillStyle = gradient; 
+                ctx.fillStyle="rgba("+p.r+","+p.g+","+p.b+",0.6)";
+		ctx.arc(p.xt, p.yt, p.radiust, Math.PI*2, false);
+		ctx.fill();
+		
+
+		p.xt =p.xt+ 2*p.vx;
+		p.yt += p.vy;
+		//p.yt+=p.vy; p.xt=(p.yt+p.vy)/slope;
+
+		if(p.xt < -50) p.xt = W+50;
+		if(p.yt < -50) p.yt = H+50;
+		if(p.xt > W+50) p.xt = -50;
+		if(p.yt > H+50) p.yt = -50;
+      lhs=Math.floor((p.xt-x)*(p.xt-x)-(p.yt-y)*(p.yt-y));  rhs=radius*radius;
+         
+    //if(lhs<=rhs) 
+//console.log(p.xt); 
+temp1=p.xt; temp2=p.yt;
+//rebound(p.vx,p.xt,p.yt);
+pixel=ctx.getImageData(p.xt,p.yt,1,1).data;
+if(p.vx<0){
+if(p.xt<=x+radius && p.xt>=x-radius && p.yt >=y-radius && p.yt<=y+radius ) { //console.log("hello");
+ if(pixel[0]==255 &&pixel[1]==255 &&pixel[2]==255){
+p.vx*=-1;//0-p.vx;
+p.vy*=-1; }
+//console.log(p.vx);
+
+//p.xt +=2*p.vx;
+//p.yt -= p.vy;
+}
+}
+else{ 
+if(p.xt<=x+radius && p.xt>=x-radius && p.yt >=y-radius && p.yt<=y+radius) { //console.log("hello");
+          //flag=1;
+//console.log(p.vx);
+p.vx*=-1;
+p.vy*=-1;
+
+//console.log(p.vx);
+//p.xt -=2*p.vx;
+//p.yt += p.vy;
+}
+
+}
+
+
+	}
+//p.vx=temp; 
+requestAnimationFrame(draw)
+}
+
+//tInterval(draw, 13);
+draw();
+/*
+function rebound(temp,z1,z2){
+
+if(temp<0){ 
+if(z1<=x+radius && z1>=x-radius && z2 >=y-radius && z2<=y+radius) { console.log("hello");
+ temp*=-1; 
+console.log('fine');
+//p.xt +=2*p.vx;
+//p.yt -= p.vy;
+}
+}
+
+if(temp>0){ 
+if(z1<=x+radius && z1>=x-radius && z2 >=y-radius && z2<=y+radius) { //console.log("hello");
+          
+ temp*=-1;
+//p.xt -=2*p.vx;
+//p.yt += p.vy;
+}
+
+}
+
+
+}
+*/
+</script>
+
