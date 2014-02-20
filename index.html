@@ -183,9 +183,9 @@ temp1=p.xt; temp2=p.yt;
 pixel=ctx.getImageData(p.xt,p.yt,1,1).data;
 if(p.vx<0){
 if(p.xt<=x+radius && p.xt>=x-radius && p.yt >=y-radius && p.yt<=y+radius ) { //console.log("hello");
- if(pixel[0]==255 &&pixel[1]==255 &&pixel[2]==255){
+// if(pixel[0]==255 &&pixel[1]==255 &&pixel[2]==255){
 p.vx*=-1;//0-p.vx;
-p.vy*=-1; }
+p.vy*=-1; //}
 //console.log(p.vx);
 
 //p.xt +=2*p.vx;
