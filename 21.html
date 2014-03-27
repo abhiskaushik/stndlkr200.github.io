@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        
+        <title>21 Game</title>
+
+  
+<style>    
+*{
+margin:0px;
+padding:0px;
+
+}
+#scene{
+//background:rgba(45,76,78,0.6);
+background-image:url(01.jpg);
+
+}
+
+</style>        
+<script src="jquery.js"></script>
+    </head>
+    <body>
+        
+            <canvas id="scene" height="600" width="1200"></canvas>
+        
+<script>        
+
+
+
+/*
+Logic:Game will have as number of dots
+User has to drag the balls to
+get a non-self intersecting polygon
+in minimum no of drags and under some time counter 
+
+*/
+
+
+
+var canvas, ctx; 
+var circles = [];
+var selectedCircle;
+var hoveredCircle;
+
+
+function Circle(x, y, radius,value){
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.value=value;
+}
+
+
+function clear() { 
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
+
+function drawCircle(x, y, radius,value) { 
+    
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.fillStyle ="blue";
+    ctx.fill()
+    ctx.font = 'bold 20pt Calibri';
+    ctx.textAlign = 'center';
+    ctx.textBaseline='middle';
+    ctx.fillStyle ="white";  
+   ctx.fillText(value, x, y);
+   
+}
+
+function drawScene() { 
+    clear(); 
+
+    ctx.beginPath(); 
+    ctx.fillStyle = 'rgba(25, 70, 10, 0.5)';
+    ctx.moveTo(circles[0].x, circles[0].y);
+    for (var i=0; i<circles.length; i++) {
+        ctx.lineTo(circles[i].x, circles[i].y);
+    }
+    ctx.closePath(); 
+    ctx.fill(); 
+
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'rgba(80, 0, 5, 0.5)';
+    ctx.stroke(); 
+
+    for (var i=0; i<circles.length; i++) { 
+        drawCircle(circles[i].x, circles[i].y,15,circles[i].value);
+    }
+}
+
+var circlesCount,nodes;
+$(function(){
+    canvas = document.getElementById('scene');
+    
+    ctx = canvas.getContext('2d');
+
+    circleRadius = 15;
+    var width = canvas.width;
+    var height = canvas.height;
+
+    var circlesCount = 7; 
+    for (var i=0; i<circlesCount; i++) {
+        var x = Math.random()*width;
+        var y = Math.random()*height; var value=Math.floor(Math.random()*15);
+        circles.push(new Circle(x,y,circleRadius,value));
+    }
+
+    
+    $('#scene').mousedown(function(e) {
+        var canvasPosition = $(this).offset();
+        var mouseX = e.layerX || 0;
+        var mouseY = e.layerY || 0;
+        for (var i=0; i<circles.length; i++) { 
+            var circleX = circles[i].x;
+            var circleY = circles[i].y;
+            var radius = circles[i].radius;
+            if (Math.pow(mouseX-circleX,2) + Math.pow(mouseY-circleY,2) < Math.pow(radius,2)) {
+                selectedCircle = i;
+                break;
+            }
+        }
+    });
+
+    $('#scene').mousemove(function(e) { 
+            var mouseX = e.layerX || 0;
+            var mouseY = e.layerY || 0;
+        if (selectedCircle != undefined) {
+            var canvasPosition = $(this).offset();
+
+            var radius = circles[selectedCircle].radius;
+            circles[selectedCircle] = new Circle(mouseX, mouseY,radius,circles[selectedCircle].value); 
+        }
+        
+        hoveredCircle = undefined;
+        for (var i=0; i<circles.length; i++) { 
+            var circleX = circles[i].x;
+            var circleY = circles[i].y;
+            var radius = circles[i].radius;
+            if (Math.pow(mouseX-circleX,2) + Math.pow(mouseY-circleY,2) < Math.pow(radius,2)) {
+                hoveredCircle = i;
+                break;
+            }
+        }
+    });
+
+    $('#scene').mouseup(function(e) { 
+       selectedCircle = undefined; 
+     calculate_nodes();
+    });
+
+    setInterval(drawScene, 30); 
+});
+
+function calculate_nodes(){
+ nodes=0;
+for(i=0;i<circles.length;i++){
+
+  if(i+3<=circles.length){
+if(check_nodes(circles[i].x,circles[i].y,circles[i+1].x,circles[i+1].y,circles[i+2].x,circles[i+2].y,circles[i+3].x,circles[i+3].y))
+ nodes++;
+}
+ else{
+if(check_nodes(circles[i].x,circles[i].y,circles[i+1].x,circles[i+1].y,circles[i+2].x,circles[i+2].y,circles[0].x,circles[0].y))
+nodes++;
+}
+}
+}
+
+function check_nodes(x1,y1,x2,y2,x3,y3,x4,y4) {
+    var xcod=((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+    var ycod=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
+    if (isNaN(xcod)||isNaN(ycod)) {
+        return false;
+    } else {
+        if (x1>=x2) {
+            if (!(x2<=xcod&&xcod<=x1)) {return false;}
+        } else {
+            if (!(x1<=xcod&&xcod<=x2)) {return false;}
+        }
+        if (y1>=y2) {
+            if (!(y2<=ycod&&ycod<=y1)) {return false;}
+        } else {
+            if (!(y1<=ycod&&ycod<=y2)) {return false;}
+        }
+        if (x3>=x4) {
+            if (!(x4<=xcod&&xcod<=x3)) {return false;}
+        } else {
+            if (!(x3<=xcod&&xcod<=x4)) {return false;}
+        }
+        if (y3>=y4) {
+            if (!(y4<=ycod&&ycod<=y3)) {return false;}
+        } else {
+            if (!(y3<=ycod&&ycod<=y4)) {return false;}
+        }
+    }
+     
+    return true;
+}
+
+
+calculate_nodes();
+</script>
+
+    </body>
+</html>
