@@ -20,6 +20,11 @@ MufflerMan Boxes..
 <canvas id="canvas"></canvas>
 <script>
 window.onload=function(){
+//sound effect
+var sound=new Audio("dd.mp3");
+sound.play();
+
+
 	var canvas=document.getElementById('canvas');
 	var ctx=canvas.getContext('2d');
 
@@ -311,7 +316,8 @@ var clock=function(){
  canvas.removeEventListener('mousemove',sketch,false);
   canvas.removeEventListener('mouseup');
   canvas.removeEventListener('mousedown'); 
-
+      
+      //sound.currentTime=0;
     //var machineTimer=setInterval(machineDrawing);
      level2();
 } 
