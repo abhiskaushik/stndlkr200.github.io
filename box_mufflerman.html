@@ -1,0 +1,422 @@
+<!--
+MufflerMan Boxes..
+
+-->
+<html>
+<head>
+ <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script> -->
+	<style>
+	        *{
+           
+            background-color: black;
+            //background-size: 100% 100%;
+            //height: 100%;
+            //width: 100%;
+        }
+
+      canvas{display: block;}
+	</style>
+<body>
+<canvas id="canvas"></canvas>
+<script>
+window.onload=function(){
+	var canvas=document.getElementById('canvas');
+	var ctx=canvas.getContext('2d');
+
+	var w=window.innerWidth;
+  canvas.width=w;
+	var h=window.innerHeight;
+  canvas.height=h;
+  //canvas.style.background="black";
+   var ctr=0;
+   
+   var words=["We Need Swaraj","Play for Change","Aam Aadmi Party","5 saal Kejriwal","AAP for Change","Vote for Good","Arvind Kejriwal","Kejriwal Fir Se","We Need Swaraj","Play for Change","Aam Aadmi Party","5 saal Kejriwal","AAP for Change","Vote for Good","Arvind Kejriwal","Kejriwal Fir Se","We Need Swaraj","Play for Change","Aam Aadmi Party","5 saal Kejriwal","AAP for Change","Vote for Good","Arvind Kejriwal","Kejriwal Fir Se","We Need Swaraj","Play for Change","Aam Aadmi Party","5 saal Kejriwal","AAP for Change","Vote for Good","Arvind Kejriwal","Kejriwal Fir Se"];
+
+   var j=0;
+ function box(x,y){
+  this.x=x;
+  this.y=y;
+  this.xVelo=10+Math.random()*20;
+  this.yVelo=1;
+  this.width=500;
+  this.height=500;
+
+  this.r=Math.round(Math.random()*255);
+  this.g=Math.round(Math.random()*255);
+  this.b=Math.round(Math.random()*255);
+ this.rgba = "rgba("+this.r+","+this.g+","+this.b+",1)";
+ this.message=words[i];
+   i++;
+
+   
+this.draw = function()
+        {
+
+          //if(i>7)
+            //i=0;
+
+          ctx.strokeStyle = this.rgba;
+          ctx.strokeRect(this.x,this.y,this.width,this.height);
+          
+          ctx.font = 'bold 50px Calibri';
+          ctx.textAlign = 'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle =this.rgba;  
+          ctx.fillText(this.message, this.x+this.width/2, this.y+this.height/2); 
+
+
+           ctr++;
+           if(ctr>7000){
+            clearInterval(timer1);
+
+          ctx.font = 'bold 50px Calibri';
+          ctx.textAlign = 'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle ="white";  
+          ctx.fillText("Vote For Honest Leaders", 400, 400);
+          ctx.fillText("Vote For Kejriwal", 600, 30);
+          ctx.fillText("Vote For Delhi", 1000, 400); 
+          /*var div=document.createElement('div');
+          div.height="100px";
+          div.width="300px";
+          div.style.background="rgba(34,56,67,0.5)";
+          div.style.position="absolute";
+          div.style.left="500px";
+          div.style.top="300px";
+          canvas.appendChild(div); */
+          ctx.strokeStyle="rgba(200,56,78,0.4)";
+          ctx.strokeRect(550,200,100,60);
+          ctx.font = 'bold 20px Calibri';
+          ctx.textAlign = 'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle ="green";  
+          ctx.fillText("Lets Play !", 600, 230);
+
+
+}
+          this.update();
+
+        }
+        
+        
+        this.update = function()
+        {
+              if(this.x < 0) {
+            this.x = 0;     
+            this.xVelo *= -1;          
+             }
+          
+
+          if(this.x > w - this.width)
+          {
+              this.x = w - this.width;    
+              this.xVelo *= -5; 
+          }
+          
+
+          if(this.y < 0) {
+            this.y = 0;     
+            this.yVelo *= -1; 
+          }
+          
+          
+          if(this.y < h - this.height) 
+            this.yVelo += .25;
+          
+          
+          if(this.y > h - this.height)
+          {
+          
+              //this.xVelo *= .5
+              this.yVelo *= .5
+              
+              this.y = h - this.height;     
+              this.yVelo *= -2; 
+          }
+
+
+          this.x += this.xVelo/5;
+          this.y += this.yVelo/3;
+        }
+      }
+      
+
+      var boxes = [];
+      
+      
+      function draw()
+      {
+      
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = "rgba(0,0,0,0.5)"
+        ctx.fillRect(0,0,w,h);
+        
+        ctx.globalCompositeOperation = "lighter"
+        
+       
+        for(i=0; i < boxes.length; i++)
+          boxes[i].draw();
+        
+        update();
+      }
+      
+      
+      function update()
+      {
+      
+        for(i=0; i < boxes.length; i++)
+          boxes[i].update();
+      }
+      
+      
+     var timer1= setInterval(function(){
+        boxes.push( new box(0,0))
+      },1000);
+      
+      
+    var timer= setInterval(draw,30);
+
+//setting eventListener on canvas
+
+canvas.addEventListener("click",function(e){
+    button_x=e.pageX;
+    button_y=e.pageY;
+    if(button_x<650 && button_x>500 && button_y<260 && button_y >200)
+      start_levels(); //alert("fine");
+
+},false);
+
+function start_levels(){
+  clearInterval(timer);
+  level1();
+}
+
+function level1(){
+  ctx.clearRect(0,0,w,h);
+
+
+//Title for each level...
+
+          ctx.font = '13px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle ="white";  
+          ctx.fillText("MufflerMan wants you to sketch something.. Please do",500,10);
+
+
+
+
+  var dots=[];
+
+
+var dotXval=["500","250","150","720","850"];
+var dotYval=["100","250","300","250","300"];
+
+
+function dot(xcod,ycod,radius,value){
+   this.xcod=xcod;
+   this.ycod=ycod;
+   this.radius=radius;
+   this.val=value;
+}
+
+function create_dots(x,y,radius,value){
+
+  ctx.beginPath();
+  ctx.arc(x,y,radius,0,2*Math.PI,true);
+  ctx.fillStyle="white";
+  ctx.fill();
+  //adding numbers..
+  ctx.font = '10px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline='middle';
+  ctx.fillStyle ="white";  
+  ctx.fillText(value,x-10,y-10);
+
+}
+
+
+function  startLevel(){
+
+    var dotRadius=10;
+    var dotsCount=5;
+  
+    for (var i = 0; i <dotsCount; i++){
+ 
+      dots.push(new dot(dotXval[i],dotYval[i],dotRadius,i+1));
+
+    }
+    
+    for (var j=0; j<dots.length; j++) { 
+   create_dots(dots[j].xcod, dots[j].ycod,5,dots[j].val);
+
+    }
+
+
+}
+
+startLevel();
+
+var mouse={x_mouse:0,y_mouse:0};
+
+canvas.addEventListener('mousemove',function(e){
+ 
+ mouse.x=e.pageX-this.offsetLeft;
+ mouse.y=e.pageY-this.offsetTop;
+
+
+},false);
+
+
+ctx.lineWidth = 6;
+ctx.lineJoin = 'round';
+ctx.lineCap = 'round';
+ctx.strokeStyle = 'blue';
+
+canvas.addEventListener('mousedown',function(e){
+   ctx.beginPath();
+   ctx.moveTo(mouse.x,mouse.y);
+
+canvas.addEventListener('mousemove',sketch,false);
+
+},false);
+
+  canvas.addEventListener('mouseup',function(){
+ 
+  canvas.removeEventListener('mousemove',sketch,false);
+
+},false);
+
+
+
+var sketch=function(){
+
+ctx.lineTo(mouse.x,mouse.y);
+ctx.stroke();
+};
+
+var time=0;
+var clock=function(){
+   ctx.clearRect(1000,20,1200,200);
+  ctx.font = '20px Arial';
+  //ctx.textAlign = 'center';
+  //ctx.textBaseline='middle';
+  ctx.fillStyle ="white";  
+  ctx.fillText(time++ + ' sec',1120,30);
+  
+  if(time>10){
+    ctx.clearRect(0,0,w,h);
+
+
+ canvas.removeEventListener('mousemove',sketch,false);
+  canvas.removeEventListener('mouseup');
+  canvas.removeEventListener('mousedown'); 
+
+    //var machineTimer=setInterval(machineDrawing);
+     level2();
+} 
+
+}
+
+setInterval(clock,1000);
+
+/*
+var itr=0;
+var machineDrawing=function(){
+ 
+ctx.beginPath(); 
+ctx.moveTo(dotXval[itr],dotYval[itr]);
+ itr++;
+ctx.lineTo(dotXval[itr],dotYval[itr]);
+
+/*
+if(itr>5){
+     //ctx.closePath();
+   //ctx.beginPath();
+   ctx.moveTo(dotXval[4],dotYval[4]);
+   ctx.lineTo(dotXval[0],dotYval[0]);
+   ctx.stroke();
+
+ // clearInterval(machineTimer);
+  canvas.removeEventListener('mousemove',sketch,false);
+  canvas.removeEventListener('mouseup');
+  canvas.removeEventListener('mousedown');  
+  }
+  */
+//ctx.stroke();
+
+
+
+}
+
+//var machineTimer=setInterval(machineDrawing);
+
+
+
+
+
+
+//mufflerman 
+function level2(){
+           //alert("heheh");
+          ctx.font = '13px Arial';
+          ctx.textAlign = 'center';
+          ctx.textBaseline='middle';
+          ctx.fillStyle ="white";  
+          ctx.fillText("MufflerMan Wants You to Search His 7 Honest Campanioins",500,10);
+
+     var road_pixels=[];
+     var fov=350;
+     for(var x=-250;x<250;x+=5){
+       for(var z=-250;z<250;z+=5)
+         road_pixels.push({x:x,y:40,z:z});
+     }
+
+
+var moveRoad=function()
+{
+  ctx.clearRect(0,20,w,h);
+
+  var imagedata = ctx.getImageData(0,0,w,h);
+
+  var i = road_pixels.length;
+  while(i--)
+  {
+    var pixel = road_pixels[i];
+
+    var scale = fov/(fov+pixel.z);
+    var x2d = pixel.x * scale + w/2;
+    var y2d = pixel.y * scale + h/2;
+
+    if(x2d >= 0 && x2d <= w && y2d >= 0 && y2d <= h)
+    {
+
+      var c = (Math.round(y2d) * imagedata.width + Math.round(x2d))*4;
+      imagedata.data[c] = 300; //red
+      imagedata.data[c+1] = 55; //green
+      imagedata.data[c+2] = 60; //blue
+      imagedata.data[c+3] = 55; //alpha
+    }
+    pixel.z -= 1;
+    if(pixel.z < -fov) pixel.z += 2*fov;
+  }
+
+  ctx.putImageData(imagedata, 0, 0);
+}
+
+setInterval(moveRoad, 1000/30);
+
+
+
+
+
+
+
+
+}
+
+}
+</script>
+</body>
+
+</head>
